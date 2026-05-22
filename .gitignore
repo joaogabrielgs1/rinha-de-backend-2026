@@ -1,0 +1,5 @@
+.venv/
+.db/dados.csv
+.db/init.sql
+.db/test-data.json
+teste_banco.py

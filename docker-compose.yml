@@ -1,0 +1,73 @@
+version: "3.8"
+
+services:
+  db:
+    image: joaoggs/rinha-db-baked:latest
+    container_name: rinha-db
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U admin -d rinha"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 300s
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=123
+      - POSTGRES_DB=rinha
+      - PGDATA=/var/lib/postgresql/dados_assados
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./db/dados.csv:/docker-entrypoint-initdb.d/dados.csv
+    #command: postgres -c shared_buffers=48MB -c max_connections=200
+    command: postgres -c shared_buffers=128MB -c work_mem=16MB -c max_connections=200
+    deploy:
+      resources:
+        limits:
+          cpus: "0.40"
+          memory: "140M"
+
+  api1:
+    build: ./app
+    container_name: rinha-api1
+    expose:
+      - "8000"
+    depends_on:
+      db:
+        condition: service_healthy
+
+    deploy:
+      resources:
+        cpus: "0.25"
+        memory: "90M"
+
+  api2:
+    build: ./app
+    container_name: rinha-api2
+    expose:
+      - "8000"
+    depends_on:
+      db:
+        condition: service_healthy
+    deploy:
+      resources:
+      limits:
+        cpus: "0.25"
+        memory: "90M"
+
+  nginx:
+    image: nginx:latest
+    container_name: rinha-nginx
+    ports:
+      - "9999:9999"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - api1
+      - api2
+    deploy:
+      resources:
+        limits:
+          cpus: "0.10"
+          memory: "30M"
