@@ -19,12 +19,14 @@ def clamp(valor):
 app = FastAPI()
 modelo_ia = None
 
+@app.get("/ready")
+async def ready_check():
+    return {"status": "ready"}
+
 @app.on_event("startup")
 async def startup_event():
     global modelo_ia
-    print("🧠 Carregando o modelo de Machine Learning In-Memory...")
     modelo_ia = joblib.load("modelo_fraude.pkl")
-    print("✅ Modelo carregado com sucesso!")
 
 @app.post("/fraud-score")
 async def process_transaction(payload: dict): 
