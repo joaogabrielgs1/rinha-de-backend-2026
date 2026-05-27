@@ -1,8 +1,8 @@
-# 🥊 Rinha de Backend 2026 - Protótipo V1 (Arquitetura Vetorial)
+# Rinha de Backend 2026 - Protótipo V1 (Arquitetura Vetorial)
 
 Este branch/diretório contém o **primeiro protótipo** desenvolvido para o desafio da Rinha de Backend 2026. O objetivo inicial era realizar a detecção de fraudes utilizando busca de vizinhos mais próximos (K-Nearest Neighbors) diretamente no banco de dados.
 
-## 🏗️ Arquitetura Inicial
+## Arquitetura Inicial
 
 - **Load Balancer:** Nginx
 - **API:** Python (FastAPI + asyncpg)
@@ -11,7 +11,7 @@ Este branch/diretório contém o **primeiro protótipo** desenvolvido para o des
 
 ---
 
-## 💥 O que deu errado? (Post-Mortem)
+## O que deu errado? (Post-Mortem)
 
 A arquitetura funcionou perfeitamente em um ambiente sem restrições, mas colapsou sob os rigorosos limites de recursos impostos pelas regras da Rinha (ex: `0.40 CPU` e `140MB RAM`).
 
@@ -31,7 +31,7 @@ Com o banco de dados demorando para processar a fila devido à restrição de CP
 
 ---
 
-## 🚀 Próximos Passos (A Pivotagem)
+## Próximos Passos (A Pivotagem)
 
 Ficou provado que realizar cálculos matemáticos pesados de álgebra linear na camada de persistência (PostgreSQL) usando hardware extremamente limitado não é escalável para milhares de RPS (Requests Per Second).
 
