@@ -1,0 +1,41 @@
+version: "3.8"
+
+services:
+  api1:
+    image: joaoggs/rinha-api2026:latest
+    container_name: rinha-api1
+    expose:
+      - "8000"
+    depends_on:
+      - nginx
+    deploy:
+      resources:
+        limits:
+          cpus: "0.45"
+          memory: "160M"
+
+  api2:
+    image: joaoggs/rinha-api2026:latest
+    container_name: rinha-api2
+    expose:
+      - "8000"
+    depends_on:
+      - nginx
+    deploy:
+      resources:
+        limits:
+          cpus: "0.45"
+          memory: "160M"
+
+  nginx:
+    image: nginx:latest
+    container_name: rinha-nginx
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    ports:
+      - "9999:9999"
+    deploy:
+      resources:
+        limits:
+          cpus: "0.10"
+          memory: "30M"
